@@ -65,22 +65,29 @@
                   >従業員管理</a
                 >
               </li>
-              <li class="active">
+              <li sec:authorize="hasRole('ADMIN')">
                 <a href="insert.html" th:href="@{/employee/toInsert}"
                   >従業員登録</a
                 >
               </li>
             </ul>
             <p class="navbar-text navbar-right">
-              <span th:text="${session.username}">山田太郎</span
-              >さんこんにちは！ &nbsp;&nbsp;&nbsp;
+              <span sec:authentication="principal.administrator.name"></span
+              >さんこんにちは! &nbsp;&nbsp;&nbsp;
               <a
-                href="../administrator/login.html"
-                class="navbar-link"
-                th:href="@{/logout}"
-                >ログアウト</a
+                href="#"
+                onclick="document.getElementById('logout-form').submit();"
               >
+                ログアウト
+              </a>
             </p>
+            <form id="logout-form" th:action="@{/logout}" method="post">
+              <input
+                type="hidden"
+                name="${_csrf.parameterName}"
+                value="${_csrf.token}"
+              />
+            </form>
           </div>
           <!-- /.navbar-collapse -->
         </div>
@@ -99,8 +106,10 @@
           th:action="@{/employee/searchEmployee}"
           method="post"
           th:object="${searchEmployeeForm}"
+          class="ui-widget"
         >
           <!-- 名前で従業員を検索するフォーム -->
+
           <p>従業員検索</p>
           <input
             type="text"
@@ -170,6 +179,8 @@
     <!-- end container -->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.12.1/jquery-ui.js"></script>
     <script src="../../static/js/bootstrap.min.js"></script>
+    <script th:src="@{/js/list.js}"></script>
   </body>
 </html>
